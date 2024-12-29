@@ -28,115 +28,131 @@ void menuAdmin() {
 }
 
 void addUsers(struct User users[], int *length) {
-    printf("*** Add a new user ***\n");
+printf("*** Add a new user ***\n");
     int numUsers;
     printf("Add number of Users: ");
     scanf("%d", &numUsers);
     getchar();  
 
     int i, j;
-    for (i = 0; i < numUsers; i++) {
+    for (i=0; i<numUsers; i++) {
         int check;
-
         do {
-            check = 1;
+            check=1;
             printf("\nEnter the ID (up to 10 characters): ");
-            if (scanf("%10s", users[*length].userId) != 1 || strlen(users[*length].userId) > 10) {
-                printf("ID must be up to 10 characters. Try again!\n");
+            if(scanf("%10s", users[*length].userId)!=1) {
+                printf("Invalid input. Try again!\n");
                 getchar();
-                check = 0;           
+                check=0;
             } else {
-                for (j = 0; j < *length; j++) {
-                    if (strcmp(users[j].userId, users[*length].userId) == 0) {
-                        printf("Duplicate ID. Try again!\n");
-                        fflush(stdin);
-                        check = 0;
-                        break;
+                if(strlen(users[*length].userId)>10) {
+                    printf("ID must be up to 10 characters. Try again!\n");
+                    getchar();  
+                    check=0;
+                } else {
+                    for (j=0; j<*length; j++) {
+                        if (strcmp(users[j].userId, users[*length].userId)==0) {
+                            printf("Duplicate ID. Try again!\n");
+                            check=0;
+                            break;
+                        }
                     }
                 }
             }
-            
-        } while (check == 0); 
+            fflush(stdin); 
+        } while (check==0);
 
         do {
-            check = 1;
+            check=1;
             printf("Enter the name: ");
             fgets(users[*length].name, sizeof(users[*length].name), stdin);
-            users[*length].name[strcspn(users[*length].name, "\n")] = 0;  
-            if (strlen(users[*length].name) == 0) {
+            users[*length].name[strcspn(users[*length].name, "\n")] = '\0';  
+            if(strlen(users[*length].name)==0) {
                 printf("Name can't be empty. Try again!\n");
-                check = 0;
+                check=0;
             } else {
-                for (j = 0; j < *length; j++) {
-                    if (strcmp(users[j].name, users[*length].name) == 0) {
-                        printf("Duplicate name. Try again!\n");
-                        check = 0;
-                        break;
+                    for (j=0; j<*length; j++) {
+                        if (strcmp(users[j].name, users[*length].name)==0) {
+                            printf("Duplicate name. Try again!\n");
+                            check=0;
+                            break;
+                        }
                     }
                 }
-            }
-        } while (check == 0);
+            fflush(stdin); 
+        } while(check==0);
 
         do {
-            check = 1;
+            check=1;
             printf("Enter the gender (1 is male, 0 is female): ");
             char genderInput[2];
             fgets(genderInput, sizeof(genderInput), stdin);
-            if (genderInput[0] == '1') {
-                users[*length].gender = true;
-            } else if (genderInput[0] == '0') {
-                users[*length].gender = false;
+            if(genderInput[0]=='1') {
+                users[*length].gender=true;
+            } else if(genderInput[0]=='0') {
+                users[*length].gender=false;
             } else {
                 printf("Invalid input. Enter 1 or 0!\n");
-                check = 0;
+                check=0;
             }
-        } while (check == 0);
+            fflush(stdin); 
+        } while(check==0);
 
         do {
-            check = 1;
+            check=1;
             printf("Enter the email: ");
             fgets(users[*length].email, sizeof(users[*length].email), stdin);
-            users[*length].email[strcspn(users[*length].email, "\n")] = 0;  
-            if (strlen(users[*length].email) == 0) {
+            users[*length].email[strcspn(users[*length].email, "\n")] = '\0';
+
+            if(strlen(users[*length].email)==0) {
                 printf("Email can't be empty. Try again!\n");
                 check = 0;
             } else {
-                for (j = 0; j < *length; j++) {
-                    if (strcmp(users[j].email, users[*length].email) == 0) {
+                for(j=0; j<*length; j++) {
+                    if(strcmp(users[j].email, users[*length].email)==0) {
                         printf("Duplicate email. Try again!\n");
-                        check = 0;
+                        check=0;
                         break;
                     }
                 }
             }
-        } while (check == 0);
+            fflush(stdin); 
+        } while(check==0);
 
         do {
-            check = 1;
+            check=1;
             printf("Enter the phone (exactly 10 characters): ");
-            if (scanf("%10s", users[*length].phone) != 1 || strlen(users[*length].phone) != 10) {
-                printf("Phone must be exactly 10 characters. Try again!\n");
+            if(scanf("%10s", users[*length].phone)!=1) {
+                printf("Invalid input. Try again!\n");
                 getchar();
-                check = 0;
+                check=0;
             } else {
-                for (j = 0; j < *length; j++) {
-                    if (strcmp(users[j].phone, users[*length].phone) == 0) {
-                        printf("Duplicate phone number. Try again!\n");
-                        check = 0;
-                        break;
+                if(strlen(users[*length].phone)!=10) {
+                    printf("Phone must be exactly 10 characters. Try again!\n");
+                    getchar();  
+                    check=0;
+                } else {
+                    for(j = 0; j<*length; j++) {
+                        if (strcmp(users[j].phone, users[*length].phone) == 0) {
+                            printf("Duplicate phone number. Try again!\n");
+                            check = 0;
+                            break;
+                        }
                     }
                 }
             }
-        } while (check == 0);
+            fflush(stdin); 
+        } while(check==0);
+        
+        
 
-        strcpy(users[*length].password, users[*length].phone);
+        strcpy(users[*length].password, users[*length].phone);  
         strcpy(users[*length].status, "Open");
 
         (*length)++;
+        printf("\nUser added successfully!\n");
     }
 }
-
-
 //done
 void showUsersData(struct User users[], int length) {
 	printf("|============|=================|======================|============|========|\n");
@@ -209,7 +225,23 @@ void searchUsersByName(struct User users[], int length) {
 	}
 }	
 
-
+void lockUnlockUsers(struct User users[], int length) {
+	char id[11], choice;
+	int found=0;
+	printf("Enter the user ID to lock/unlock: ");
+	scanf("%10s", id);
+	int i;
+	for(i=0; i<length; i++){
+		if(strcmp(users[i].userId, id)==0){
+			found=1;
+			if(strcmp(users[i].status, "Open")==0){
+				printf("");
+			}
+		}
+	}
+	
+}
+		
 void saveUsersToFile() {
 	FILE *file=fopen("Bank_account_management.dat", "wb");
 	if(file==NULL){
