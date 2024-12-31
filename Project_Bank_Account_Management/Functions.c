@@ -23,6 +23,8 @@ void menuAdmin() {
 	printf("[4] Lock (Unkock) an user.\n");
 	printf("[5] User Guideline.\n");
 	printf("[6] About Us.\n");
+	printf("[7] Soft users by name.\n");
+	printf("[8] Search users by name.\n");
 	printf("[0] Exit the program.\n");
 	printf("\n========================\n");				
 }
@@ -45,7 +47,7 @@ printf("*** Add a new user ***\n");
                 getchar();
                 check=0;
             } else {
-                if(strlen(users[*length].userId)>10) {
+                if(strlen(users[*length].userId)>=10) {
                     printf("ID must be up to 10 characters. Try again!\n");
                     getchar();  
                     check=0;
@@ -107,7 +109,10 @@ printf("*** Add a new user ***\n");
             if(strlen(users[*length].email)==0) {
                 printf("Email can't be empty. Try again!\n");
                 check = 0;
-            } else {
+            } else if(users[*length].email[0]=='@'){
+				printf("Email can not start with'@'. Try again!\n");
+				check=0;			
+			} else {
                 for(j=0; j<*length; j++) {
                     if(strcmp(users[j].email, users[*length].email)==0) {
                         printf("Duplicate email. Try again!\n");
@@ -143,8 +148,82 @@ printf("*** Add a new user ***\n");
             }
             fflush(stdin); 
         } while(check==0);
-        
-        
+    	
+    	do {
+    		check=1;
+    		printf("Enter the date of birth (dd/mm/yyyy):\n");
+    		printf("   Enter the day: ");
+    		scanf("%d", &users[*length].dateOfBirth.day);
+    		printf("   Enter the month: ");
+    		scanf("%d", &users[*length].dateOfBirth.month);
+    		printf("   Enter the year: ");
+    		scanf("%d", &users[*length].dateOfBirth.year);
+    		getchar();
+    		switch(users[*length].dateOfBirth.month){
+		    	case 2:
+		    		if(users[*length].dateOfBirth.year%4==0 && users[*length].dateOfBirth.year%100!=0 || users[*length].dateOfBirth.year%400==0){
+			            if(users[*length].dateOfBirth.day>0 && users[*length].dateOfBirth.day<=29){
+	           	            break;
+	           	        }else{
+	           		        printf("Invalid. Try again.\n");
+	           		        check=0;
+				        }
+			        }else{
+				        if(users[*length].dateOfBirth.day>0 && users[*length].dateOfBirth.day<=28){
+	           	            break;
+	           	        }else{
+	           		        printf("Invalid. Try again.\n");
+	           		        check=0;
+				        }
+			        }
+			        break;
+			    case 1:
+			    case 3:
+			    case 5:
+			    case 7:
+			    case 8:
+			    case 10:
+			    case 12:
+			    	if(users[*length].dateOfBirth.day>0 && users[*length].dateOfBirth.day<=31){
+	           	        break;
+	           	    }else{
+	           		    printf("Invalid. Try again.\n");
+	           		    check=0;
+				    }
+				    break;
+				case 4:
+				case 6:
+				case 9:
+				case 11:
+					if(users[*length].dateOfBirth.day>0 && users[*length].dateOfBirth.day<=30){
+	           	        break;
+	           	    }else{
+	           		    printf("Invalid. Try again.\n");
+	           		    check=0;
+				    }
+				    break;
+			}      
+		} while(check==0);
+		
+		do {
+            check=1;
+            printf("Enter the Username: ");
+            fgets(users[*length].userName, sizeof(users[*length].userName), stdin);
+            users[*length].userName[strcspn(users[*length].userName, "\n")] = '\0';  
+            if(strlen(users[*length].userName)==0) {
+                printf("User name can't be empty. Try again!\n");
+                check=0;
+            } else {
+                    for (j=0; j<*length; j++) {
+                        if (strcmp(users[j].userName, users[*length].userName)==0) {
+                            printf("Duplicate user name. Try again!\n");
+                            check=0;
+                            break;
+                        }
+                    }
+                }
+            fflush(stdin); 
+        } while(check==0);
 
         strcpy(users[*length].password, users[*length].phone);  
         strcpy(users[*length].status, "Open");
@@ -155,6 +234,10 @@ printf("*** Add a new user ***\n");
 }
 //done
 void showUsersData(struct User users[], int length) {
+	if (length == 0) {  
+        printf("No users available.\n");  
+        return;  
+    }  
 	printf("|============|=================|======================|============|========|\n");
 	printf("| %-10s | %-15s | %-20s | %-10s | %-6s |\n", "ID", "Name", "Email", "Phone", "Status");  
     printf("|============|=================|======================|============|========|\n");
@@ -166,6 +249,28 @@ void showUsersData(struct User users[], int length) {
         printf("|------------|-----------------|----------------------|------------|--------|\n"); 
     }  
 }
+
+void showDigitalUsersData(struct User users[], int length) {
+	if(length==0) {  
+        printf("No users available.\n");  
+        return;  
+    }  
+    printf("|============|=================|======================|============|========|========|=============|=================|\n");
+    printf("| %-10s | %-15s | %-20s | %-10s | %-6s | %-6s | %-11s | %-15s |\n", "ID", "Name", "Email", "Phone", "Gender", "Status", "Birth Date", "Username");  
+    printf("|============|=================|======================|============|========|========|=============|=================|\n");
+ 
+    int i;
+    for (i=0; i<length; i++) {  
+        printf("| %-10s | %-15s | %-20s | %-10s | %-6s | %-6s | %02d/%02d/%04d  | %-15s |\n",   
+                users[i].userId, users[i].name, users[i].email, users[i].phone, 
+                (users[i].gender==1 ? "Male" : "Female"), users[i].status, 
+                users[i].dateOfBirth.day, users[i].dateOfBirth.month, users[i].dateOfBirth.year,
+                users[i].userName);  
+        printf("|------------|-----------------|----------------------|------------|--------|--------|-------------|-----------------|\n"); 
+    }  
+}
+
+
 //done
 void softUsersByName(struct User users[], int length) {
 	printf("\n***Sort Order***\n");
@@ -242,11 +347,6 @@ void lockUnlockUsers(struct User users[], int length) {
 	
 }
 		
-void saveUsersToFile() {
-	FILE *file=fopen("Bank_account_management.dat", "wb");
-	if(file==NULL){
-		printf("Unable to open file.\n");
-	}
-}
+
 void loadUsersFromFile();
 

@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
                             showUsersData(users, currentLength);
                             break;
                         case 3:
-                        	softUsersByName(users, currentLength);
+                        	showDigitalUsersData(users, currentLength);
                             break;
                         case 4:
                         	searchUsersByName(users, currentLength);
@@ -43,6 +43,12 @@ int main(int argc, char *argv[]) {
                             break;
                         case 6:
                             break;
+                        case 7:
+                        	softUsersByName(users, currentLength);
+                        	break;
+                    	case 8:
+                    		searchUsersByName(users, currentLength);
+                        	break;
                         case 0:
                             printf("\nExiting Admin Menu...\n");
                             break;
