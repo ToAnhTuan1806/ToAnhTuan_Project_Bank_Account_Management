@@ -2,14 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "Functions.h"
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char *argv[]) {
     int currentLength = 0;
     int choice, usChoice, adChoice;
-    
+	loadUsersFromFile(users, &currentLength);	
+	
     do {
+    	system("cls");
         menuStart();
         printf("Enter The Choice: ");
         scanf("%d", &choice);
@@ -21,6 +24,7 @@ int main(int argc, char *argv[]) {
 
             case 2:
                 do {
+                	system("cls");
                     menuAdmin();
                     printf("Enter The Choice: ");
                     scanf("%d", &adChoice);
@@ -28,26 +32,42 @@ int main(int argc, char *argv[]) {
 
                     switch(adChoice) {
                         case 1:
+                        	system("cls");
+                        	printf("*** Add a new user ***\n");
                             addUsers(users, &currentLength);
+							saveUsersToFile(users, currentLength);					          
                             break;
                         case 2:
+                        	system("cls");
+                        	printf("*** Show All users ***\n");
                             showUsersData(users, currentLength);
+                            
                             break;
                         case 3:
-                        	showDigitalUsersData(users, currentLength);
+                        	system("cls");
+                        	printf("*** Show detail an user ***\n");
+                        	showDigitalUsersData(users, currentLength);                      	
                             break;
                         case 4:
-                        	searchUsersByName(users, currentLength);
+                        	system("cls");
+                        	lockUnlockUsers(users, currentLength);
+                        	saveUsersToFile(users, currentLength);
                             break;
                         case 5:
+                        	system("cls");
+                    		printf("*** Search users by name ***\n");
+                    		searchUsersByName(users, currentLength);
                             break;
                         case 6:
+                        	system("cls");
+                        	printf("*** Search users by Id ***\n");
+                        	searchUsersById(users, currentLength);                      	
                             break;
                         case 7:
+                        	system("cls");
+                        	printf("*** Soft users by name ***\n");
                         	softUsersByName(users, currentLength);
-                        	break;
-                    	case 8:
-                    		searchUsersByName(users, currentLength);
+                        	saveUsersToFile(users, currentLength);
                         	break;
                         case 0:
                             printf("\nExiting Admin Menu...\n");
